@@ -1,0 +1,52 @@
+# Flask Backend Template - Production Docker Compose
+# Usage: docker-compose up -d
+version: '3.8'
+
+services:
+  # Flask Application
+  web:
+    build: .
+    container_name: flask-app
+    ports:
+      - "8000:8000"
+    environment:
+      - FLASK_ENV=production
+      - DEBUG=False
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/flask_app
+      - SECRET_KEY=${SECRET_KEY:-change-this-in-production}
+      - CORS_ORIGINS=${CORS_ORIGINS:-*}
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  # PostgreSQL Database
+  db:
+    image: postgres:15-alpine
+    container_name: flask-db
+    environment:
+      - POSTGRES_DB=flask_app
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - app-network
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  app-network:
+    driver: bridge
