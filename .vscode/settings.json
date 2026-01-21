@@ -5,18 +5,9 @@
   // Pytest Configuration
   "python.testing.pytestEnabled": true,
   "python.testing.unittestEnabled": false,
-  "python.testing.pytestArgs": [
-    "tests",
-    "-v",
-    "--cov=app",
-    "--cov-report=html",
-    "--cov-report=term"
-  ],
+  "python.testing.pytestArgs": ["tests", "-v"],
 
-  // Linting & Formatting (Ruff)
-  "python.linting.enabled": true,
-  "python.linting.ruffEnabled": true,
-  "python.formatting.provider": "none",
+  // Ruff (Linting & Formatting)
   "[python]": {
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
@@ -63,16 +54,5 @@
     "**/.ruff_cache": true,
     "**/htmlcov": true,
     "**/.coverage": true
-  },
-
-  // Extension Recommendations
-  "extensions.ignoreRecommendations": false,
-  "python.testing.unittestArgs": [
-    "-v",
-    "-s",
-    "./tests",
-    "-p",
-    "*test.py"
-  ],
-  "python-envs.pythonProjects": [],
+  }
 }
